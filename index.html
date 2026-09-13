@@ -82,6 +82,47 @@
     white-space:nowrap;
   }
   .cta-btn:hover{ background:var(--brass); color:var(--ink); }
+
+  .menu-toggle{
+    display:none; flex-direction:column; justify-content:center; gap:5px;
+    width:32px; height:32px; padding:0; background:none; border:none; cursor:pointer;
+    z-index:60;
+  }
+  .menu-toggle span{
+    display:block; width:100%; height:2px; background:var(--paper);
+    transition:transform .25s ease, opacity .25s ease;
+  }
+  .menu-toggle.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+  .menu-toggle.open span:nth-child(2){ opacity:0; }
+  .menu-toggle.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+  .mobile-nav{
+    position:fixed; inset:0; z-index:45;
+    background:rgba(13,15,12,0.98);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .mobile-nav.open{ opacity:1; pointer-events:auto; }
+  .mobile-nav nav{ display:flex; flex-direction:column; align-items:center; gap:28px; }
+  .mobile-nav a{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-weight:600; font-size:26px; letter-spacing:0.05em; text-transform:uppercase;
+    color:var(--paper-dim);
+  }
+  .mobile-nav a:hover{ color:var(--paper); }
+  .mobile-nav .mobile-cta{
+    margin-top:12px; border:1px solid var(--brass); color:var(--paper);
+    padding:12px 28px; border-radius:2px; font-size:16px;
+  }
+
+  @media (max-width:760px){
+    header.site{ padding:14px 20px; }
+    .brand-name{ font-size:14px; }
+    .brand-name span{ font-size:9px; }
+    .brand-mark{ width:32px; height:32px; }
+    nav.links, .cta-btn{ display:none; }
+    .menu-toggle{ display:flex; }
+  }
   .nav-toggle{ display:none; }
 
   /* HERO */
@@ -279,10 +320,23 @@
     <a href="#visita">Contato</a>
   </nav>
   <a class="cta-btn" href="#visita">Agendar</a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </header>
 
+<div class="mobile-nav" id="mobileNav">
+  <nav>
+    <a href="#estudio">Estúdio</a>
+    <a href="#tatuadores">Tatuadores</a>
+    <a href="#trabalhos">Trabalhos</a>
+    <a href="#visita">Contato</a>
+    <a class="mobile-cta" href="#visita">Agendar</a>
+  </nav>
+</div>
+
 <section class="hero">
-  <div class="hero-bg-logo" aria-hidden="true"><img src="img002.jpg" alt=""></div>
+  <div class="hero-bg-logo" aria-hidden="true"><img src="img002.png" alt=""></div>
   <div class="hero-content">
     <div class="hero-inner">
       <h1 class="display">Still Point<br>Tattoo</h1>
@@ -514,6 +568,22 @@
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.15 });
   revealEls.forEach(el => io.observe(el));
+
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  function closeMenu(){
+    menuToggle.classList.remove('open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    mobileNav.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  menuToggle.addEventListener('click', () => {
+    const isOpen = mobileNav.classList.toggle('open');
+    menuToggle.classList.toggle('open', isOpen);
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 </script>
 
 </body>
