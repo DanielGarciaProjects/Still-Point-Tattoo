@@ -150,7 +150,27 @@
     position:relative; z-index:2; width:100%;
     padding:0 32px 88px;
   }
-  .hero-inner{ max-width:640px; margin:0 auto 0 0; display:flex; flex-direction:column; align-items:flex-start; gap:34px; }
+  .hero-inner{ max-width:640px; display:flex; flex-direction:column; align-items:flex-start; gap:34px; }
+  .hero-row{
+    display:flex; align-items:flex-end; justify-content:space-between; gap:56px;
+    max-width:1100px; margin:0 auto 0 0;
+  }
+  .hero-photo{
+    flex-shrink:0; width:300px; aspect-ratio:1/1; overflow:hidden;
+    border:1px solid rgba(239,233,219,0.22);
+    box-shadow:0 24px 60px rgba(0,0,0,0.55);
+  }
+  .hero-photo img{
+    width:100%; height:100%; object-fit:cover;
+    filter: grayscale(20%) sepia(30%) saturate(1.15) contrast(1.08) brightness(0.9) hue-rotate(-6deg);
+  }
+  @media (max-width:960px){
+    .hero-row{ flex-direction:column; align-items:flex-start; gap:36px; }
+    .hero-photo{ width:100%; max-width:340px; }
+  }
+  @media (max-width:520px){
+    .hero-photo{ max-width:100%; }
+  }
   .hero h1{
     font-size:clamp(64px, 11vw, 132px);
     color:var(--paper);
@@ -338,13 +358,16 @@
 <section class="hero">
   <div class="hero-bg-logo" aria-hidden="true"><img src="img002.png" alt=""></div>
   <div class="hero-content">
-    <div class="hero-inner">
-      <h1 class="display">Still Point<br>Tattoo</h1>
-      <div class="hero-meta">
-        <div><span class="label">Onde</span><span class="val">Santo André, SP</span></div>
-        <div><span class="label">Formato</span><span class="val">Estúdio privado</span></div>
-        <div><span class="label">Time</span><span class="val">4 tatuadores residentes</span></div>
+    <div class="hero-row">
+      <div class="hero-inner">
+        <h1 class="display">Still Point<br>Tattoo</h1>
+        <div class="hero-meta">
+          <div><span class="label">Onde</span><span class="val">Santo André, SP</span></div>
+          <div><span class="label">Formato</span><span class="val">Estúdio privado</span></div>
+          <div><span class="label">Time</span><span class="val">3 tatuadores residentes</span></div>
+        </div>
       </div>
+      <div class="hero-photo"><img src="img043.jpg" alt="Interior do estúdio Still Point Tattoo"></div>
     </div>
   </div>
   <div class="scroll-hint">Role para conhecer</div>
@@ -420,15 +443,6 @@
         </div>
         <a class="artist-cta" href="#troper-portfolio">Ver portfólio</a>
       </div>
-      <div class="artist-row reveal">
-        <div class="avatar"><img src="img011.jpg" alt="Elder Pozo tatuando" style="transform:scale(1.6); object-position:50% 30%;"></div>
-        <div class="artist-info">
-          <div class="name display">Elder Pozo</div>
-          <div class="role">Tatuador residente</div>
-          <div class="note">Biografia completa em breve.</div>
-        </div>
-        <a class="artist-cta" href="#elder-portfolio">Ver portfólio</a>
-      </div>
     </div>
   </div>
 </section>
@@ -493,20 +507,6 @@
       <div class="work-photo reveal"><img src="img037.jpg" alt="Tatuagem realizada por Troper Art"></div>
       <div class="work-photo reveal"><img src="img038.jpg" alt="Tatuagem realizada por Troper Art"></div>
       <div class="work-photo reveal"><img src="img039.jpg" alt="Tatuagem realizada por Troper Art"></div>
-    </div>
-  </div>
-</section>
-
-<section class="works" id="elder-portfolio">
-  <div class="wrap">
-    <div class="section-tag reveal"><span class="num">04d</span><div class="rule"></div><span class="txt">Portfólio</span></div>
-    <div class="studio-top reveal">
-      <h2 class="display">Trabalhos de Elder Pozo</h2>
-      <p>Biografia completa do Elder em breve — assim que ela chegar, entra aqui ao lado das fotos.</p>
-    </div>
-    <div class="works-grid">
-      <div class="work-photo reveal"><img src="img040.jpg" alt="Tatuagem realizada por Elder Pozo"></div>
-      <div class="work-photo reveal"><img src="img041.jpg" alt="Tatuagem realizada por Elder Pozo"></div>
     </div>
   </div>
 </section>
