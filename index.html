@@ -150,27 +150,15 @@
     position:relative; z-index:2; width:100%;
     padding:0 32px 88px;
   }
-  .hero-inner{ max-width:640px; display:flex; flex-direction:column; align-items:flex-start; gap:34px; }
-  .hero-row{
-    display:flex; align-items:flex-end; justify-content:space-between; gap:56px;
-    max-width:1100px; margin:0 auto 0 0;
+  .hero-bg-photo{
+    position:absolute; inset:0; z-index:0; overflow:hidden;
   }
-  .hero-photo{
-    flex-shrink:0; width:300px; aspect-ratio:1/1; overflow:hidden;
-    border:1px solid rgba(239,233,219,0.22);
-    box-shadow:0 24px 60px rgba(0,0,0,0.55);
+  .hero-bg-photo img{
+    width:100%; height:100%; object-fit:cover; object-position:center 30%;
+    opacity:0.38;
+    filter: grayscale(35%) sepia(25%) saturate(1.1) contrast(1.05) brightness(0.75);
   }
-  .hero-photo img{
-    width:100%; height:100%; object-fit:cover;
-    filter: grayscale(20%) sepia(30%) saturate(1.15) contrast(1.08) brightness(0.9) hue-rotate(-6deg);
-  }
-  @media (max-width:960px){
-    .hero-row{ flex-direction:column; align-items:flex-start; gap:36px; }
-    .hero-photo{ width:100%; max-width:340px; }
-  }
-  @media (max-width:520px){
-    .hero-photo{ max-width:100%; }
-  }
+  .hero-inner{ max-width:640px; margin:0 auto 0 0; display:flex; flex-direction:column; align-items:flex-start; gap:34px; }
   .hero h1{
     font-size:clamp(64px, 11vw, 132px);
     color:var(--paper);
@@ -356,18 +344,16 @@
 </div>
 
 <section class="hero">
+  <div class="hero-bg-photo" aria-hidden="true"><img src="img043.jpg" alt=""></div>
   <div class="hero-bg-logo" aria-hidden="true"><img src="img002.png" alt=""></div>
   <div class="hero-content">
-    <div class="hero-row">
-      <div class="hero-inner">
-        <h1 class="display">Still Point<br>Tattoo</h1>
-        <div class="hero-meta">
-          <div><span class="label">Onde</span><span class="val">Santo André, SP</span></div>
-          <div><span class="label">Formato</span><span class="val">Estúdio privado</span></div>
-          <div><span class="label">Time</span><span class="val">3 tatuadores residentes</span></div>
-        </div>
+    <div class="hero-inner">
+      <h1 class="display">Still Point<br>Tattoo</h1>
+      <div class="hero-meta">
+        <div><span class="label">Onde</span><span class="val">Santo André, SP</span></div>
+        <div><span class="label">Formato</span><span class="val">Estúdio privado</span></div>
+        <div><span class="label">Time</span><span class="val">3 tatuadores residentes</span></div>
       </div>
-      <div class="hero-photo"><img src="img043.jpg" alt="Interior do estúdio Still Point Tattoo"></div>
     </div>
   </div>
   <div class="scroll-hint">Role para conhecer</div>
