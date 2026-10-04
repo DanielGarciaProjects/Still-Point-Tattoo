@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# IAs de busca e assistentes (ChatGPT, Perplexity, Claude, Google AI)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://stillpointtattoo.netlify.app/sitemap.xml
