@@ -38,6 +38,7 @@
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Still Point Tattoo",
+  "telephone": "+5511980013438",
   "image": "https://stillpointtattoo.netlify.app/img043.jpg",
   "url": "https://stillpointtattoo.netlify.app/",
   "description": "Estúdio de tatuagem privado em Santo André, SP, com 3 tatuadores residentes. Sessões individuais, focadas e sem pressa.",
@@ -351,6 +352,15 @@
   .map-frame .pin .dot{ width:14px; height:14px; border-radius:50%; background:var(--brass); box-shadow:0 0 0 6px rgba(179,145,95,0.18); }
   .map-frame .pin .stem{ width:1px; height:36px; background:var(--brass); }
   .map-frame .pin-label{ font-family:'Big Shoulders Display',sans-serif; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:var(--paper-dim); margin-top:4px; text-align:center;}
+  .lead{background:rgba(0,0,0,.22);border:1px solid var(--line);padding:28px;align-self:start}
+  .lead h3{font-size:30px;margin-bottom:4px}
+  .lead label{display:block;font-size:13px;color:var(--paper-dim);margin:14px 0 4px}
+  .lead input,.lead textarea{width:100%;background:var(--ink);border:1px solid var(--line);color:var(--paper);padding:10px 12px;font:inherit;border-radius:2px}
+  .lead .chk{display:flex;gap:10px;align-items:flex-start}
+  .lead .chk input{width:auto;margin-top:4px}
+  .lead button{margin-top:18px;width:100%;padding:14px;background:var(--brass);color:var(--ink);border:0;font:700 15px 'Big Shoulders Display',sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+  .lead .hp{position:absolute;left:-9999px}
+  .lead .fine{font-size:13px;color:var(--paper-dim);margin-top:10px}
   @media (max-width:880px){ .visit .wrap{ grid-template-columns:1fr; gap:48px; } }
 
   /* FOOTER */
@@ -566,16 +576,20 @@
       </div>
       <div class="visit-block reveal">
         <div class="label">Contato</div>
-        <div class="val">WhatsApp e Instagram a confirmar</div>
+        <div class="val"><a href="https://wa.me/5511980013438?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Still%20Point%20Tattoo%20e%20gostaria%20de%20agendar%20uma%20sess%C3%A3o." target="_blank" rel="noopener">(11) 98001-3438</a></div>
       </div>
     </div>
-    <div class="map-frame reveal">
-      <div class="pin">
-        <div class="dot"></div>
-        <div class="stem"></div>
-      </div>
-      <div class="pin-label" style="position:absolute; bottom:24px; left:50%; transform:translateX(-50%);">Santo André · SP</div>
-    </div>
+    <form class="lead reveal" id="leadForm" novalidate>
+      <h3 class="display">Conte sua ideia</h3>
+      <label for="ln">Nome</label><input id="ln" name="name" required maxlength="120" autocomplete="name">
+      <label for="lp">WhatsApp</label><input id="lp" name="phone" type="tel" required maxlength="30" autocomplete="tel" placeholder="(11) 90000-0000">
+      <label for="li">Ideia da tatuagem</label><textarea id="li" name="ideia" rows="3" maxlength="600"></textarea>
+      <label for="lr">Região do corpo</label><input id="lr" name="regiao" maxlength="80">
+      <input type="text" name="site" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="chk"><input type="checkbox" name="consent" required> Autorizo o Still Point Tattoo a usar meus dados para responder ao meu contato (LGPD).</label>
+      <button type="submit">Continuar no WhatsApp</button>
+      <p class="fine" id="lm" role="status"></p>
+    </form>
   </div>
 </section>
 
@@ -623,6 +637,36 @@
     document.body.style.overflow = isOpen ? 'hidden' : '';
   });
   mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  // Formulário de contato: salva o lead no CRM (Supabase) e abre o WhatsApp do estúdio
+  (function(){
+    const SB='https://iipfdbpcovhgkmutwlky.supabase.co', KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpcGZkYnBjb3ZoZ2ttdXR3bGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI1NDk2MzIsImV4cCI6MjEwODEyNTYzMn0.vXsfJRwZVfFMvTstVRZC5KMvJXc_BW771bFVPGiy-Pg', WA='5511980013438';
+    const f=document.getElementById('leadForm'); if(!f) return;
+    const q=new URLSearchParams(location.search), utm={};
+    q.forEach((v,k)=>{ if(k.startsWith('utm_')||k==='gclid'||k==='fbclid') utm[k]=v.slice(0,120); });
+    if(document.referrer) utm.referrer=document.referrer.slice(0,200);
+    const m=(utm.utm_medium||'').toLowerCase(), s=(utm.utm_source||'').toLowerCase();
+    const source=/cpc|paid|ads/.test(m)?'anuncio':s.includes('instagram')?'instagram':s.includes('google')?'google':'site';
+    f.addEventListener('submit', async e=>{
+      e.preventDefault();
+      const d=new FormData(f), msg=document.getElementById('lm');
+      if(d.get('site')) return;
+      const name=(d.get('name')||'').trim(), phone=(d.get('phone')||'').trim();
+      if(!name||!phone||!d.get('consent')){ msg.textContent='Preencha nome e WhatsApp e aceite o uso dos dados.'; return; }
+      const ideia=(d.get('ideia')||'').trim(), regiao=(d.get('regiao')||'').trim();
+      msg.textContent='Abrindo o WhatsApp...';
+      if(SB.startsWith('https://')){
+        try{
+          const c=new AbortController(); setTimeout(()=>c.abort(),4000);
+          const hd={apikey:KEY,'Content-Type':'application/json',Prefer:'return=minimal'};
+          if(KEY.startsWith('eyJ')) hd.Authorization='Bearer '+KEY;
+          await fetch(SB+'/rest/v1/leads',{method:'POST',signal:c.signal,headers:hd,body:JSON.stringify({name,phone,source,utm,consent:true,details:{ideia,regiao}})});
+        }catch(_){}
+      }
+      const t='Olá! Meu nome é '+name+'. Vim pelo site da Still Point Tattoo e quero fazer uma tatuagem'+(ideia?': '+ideia:'')+(regiao?' (região: '+regiao+')':'')+'. Gostaria de agendar.';
+      location.href='https://wa.me/'+WA+'?text='+encodeURIComponent(t);
+    });
+  })();
 </script>
 
 </body>
