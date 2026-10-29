@@ -28,6 +28,12 @@
 <link rel="icon" href="img002.png" type="image/png">
 <meta name="theme-color" content="#0d0f0c">
 
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FRNYXS982Q"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+gtag('js',new Date());gtag('config','G-FRNYXS982Q');
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&display=swap" rel="stylesheet">
 
@@ -611,6 +617,7 @@
   </div>
 </footer>
 
+<script src="config.js"></script>
 <script>
   const header = document.getElementById('siteHeader');
   window.addEventListener('scroll', () => {
@@ -638,9 +645,11 @@
   });
   mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 
+  document.addEventListener('click',e=>{const a=e.target.closest('a[href*="wa.me"]'); if(a) gtag('event','whatsapp_click',{link_text:(a.textContent||'').trim().slice(0,40)});});
+
   // Formulário de contato: salva o lead no CRM (Supabase) e abre o WhatsApp do estúdio
   (function(){
-    const SB='https://iipfdbpcovhgkmutwlky.supabase.co', KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpcGZkYnBjb3ZoZ2ttdXR3bGt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI1NDk2MzIsImV4cCI6MjEwODEyNTYzMn0.vXsfJRwZVfFMvTstVRZC5KMvJXc_BW771bFVPGiy-Pg', WA='5511980013438';
+    const S=window.SUPA||{}, SB=S.url||'', KEY=S.key||'', WA='5511980013438';
     const f=document.getElementById('leadForm'); if(!f) return;
     const q=new URLSearchParams(location.search), utm={};
     q.forEach((v,k)=>{ if(k.startsWith('utm_')||k==='gclid'||k==='fbclid') utm[k]=v.slice(0,120); });
@@ -664,6 +673,7 @@
         }catch(_){}
       }
       const t='Olá! Meu nome é '+name+'. Vim pelo site da Still Point Tattoo e quero fazer uma tatuagem'+(ideia?': '+ideia:'')+(regiao?' (região: '+regiao+')':'')+'. Gostaria de agendar.';
+      gtag('event','generate_lead',{lead_source:source,transport_type:'beacon'});
       location.href='https://wa.me/'+WA+'?text='+encodeURIComponent(t);
     });
   })();
